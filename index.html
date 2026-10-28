@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MAI Body | Join the Waitlist</title>
+<meta name="description" content="Rewire your brain. Transform your body. Join the MAI Body waitlist.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main id="join" class="stage" aria-labelledby="join-h">
+  <div class="bg" aria-hidden="true"><img class="fill" src="images/join-bg.jpg" alt=""><img class="m" src="images/join.jpg" alt=""></div>
+  <img class="fg" src="images/join.jpg" alt="Woman standing in the sea in a red bikini">
+
+  <header class="top"><a class="mark" href="/"><span class="badge">MB</span><span class="wordmark">MAI BODY</span></a></header>
+
+  <div class="content">
+    <h1 id="join-h">THIS IS MAI&nbsp;BODY.<em>Join the waitlist.</em></h1>
+    <form id="waitlist" class="card" novalidate>
+      <div class="field" id="f-name"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" required><p class="msg" aria-live="polite"></p></div>
+      <div class="field" id="f-email"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" required><p class="msg" aria-live="polite"></p></div>
+      <div class="field" id="f-phone"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+44 7700 900000" required><p class="msg" aria-live="polite"></p></div>
+      <div class="hp" aria-hidden="true"><label for="company">Company</label><input id="company" name="company" tabindex="-1" autocomplete="off"></div>
+      <button class="submit" type="submit" id="submit"><span>Join now</span><span class="arrow" aria-hidden="true">&rarr;</span></button>
+    </form>
+  </div>
+
+  <footer class="foot">Base. Build. Become.</footer>
+</main>
+<script>
+/* Set this to your form handler (MailerLite, Zapier, GHL webhook etc.) when you deploy.
+   Left empty, the form validates and goes straight to the thank-you page. */
+const WAITLIST_ENDPOINT = "";
+
+
+const form = document.getElementById("waitlist");
+const rules = {
+  name: v => v.trim().length >= 2 || "Please enter your name.",
+  email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || "Enter an email like name@example.com.",
+  phone: v => v.replace(/[^\d]/g,"").length >= 7 || "Enter a phone number we can reach you on."
+};
+function check(id){
+  const input = document.getElementById(id), wrap = document.getElementById("f-"+id);
+  const r = rules[id](input.value);
+  wrap.classList.toggle("bad", r !== true);
+  wrap.querySelector(".msg").textContent = r === true ? "" : r;
+  input.setAttribute("aria-invalid", r === true ? "false" : "true");
+  return r === true;
+}
+for (const id in rules) document.getElementById(id).addEventListener("blur", () => { if (document.getElementById(id).value) check(id); });
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  const ok = Object.keys(rules).map(check).every(Boolean);
+  if (!ok) { form.querySelector(".bad input").focus(); return; }
+  if (document.getElementById("company").value) return; // bot trap
+  const data = { name: form.name.value.trim(), email: form.email.value.trim(), phone: form.phone.value.trim() };
+  const btn = document.getElementById("submit");
+  btn.disabled = true; btn.firstElementChild.textContent = "Joining...";
+  if (WAITLIST_ENDPOINT) {
+    try { await fetch(WAITLIST_ENDPOINT, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(data) }); } catch (err) {}
+  }
+  location.href = "thank-you.html?name=" + encodeURIComponent(data.name.split(" ")[0]);
+});
+</script>
+</body>
+</html>

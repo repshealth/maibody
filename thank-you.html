@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MAI Body | You're on the list</title>
+<meta name="description" content="Rewire your brain. Transform your body. Join the MAI Body waitlist.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main id="thank-you" class="stage" aria-labelledby="ty-h">
+  <div class="bg" aria-hidden="true"><img class="fill" src="images/thank-you-bg.jpg" alt=""><img class="m" src="images/thank-you.jpg" alt=""></div>
+  <img class="fg" src="images/thank-you.jpg" alt="Woman on a palm-lined beach, arms raised">
+
+  <header class="top"><a class="mark" href="/"><span class="badge">MB</span><span class="wordmark">MAI BODY</span></a></header>
+
+  <div class="content">
+    <h1 id="ty-h">YOU'RE ON THE LIST<span id="ty-name"></span>.<em>We'll be in touch soon.</em></h1>
+    <a class="back" href="/">&larr; Back</a>
+  </div>
+
+  <footer class="foot">Base. Build. Become.</footer>
+</main>
+<script>
+const n = new URLSearchParams(location.search).get("name");
+if (n) document.getElementById("ty-name").textContent = ", " + n.toUpperCase();
+</script>
+</body>
+</html>
